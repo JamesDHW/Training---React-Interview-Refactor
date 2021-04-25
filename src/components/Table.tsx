@@ -55,7 +55,7 @@ const BlackJackTable: FC = () => {
       <Player
         onHit={() => takeCard(setPlayerHand)}
         onStick={() => setHasStuck(true)}
-        cards={playerHand}
+        score={playerScore}
         stick={hasStuck}
       />
       <PlayingCards cards={dealerHand} />

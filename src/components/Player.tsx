@@ -4,12 +4,11 @@ import { calculateScore } from "./helpers";
 interface Props {
   onHit: () => void;
   onStick: () => void;
-  cards: number[];
+  score: number;
   stick: boolean;
 }
 
-const Player: FC<Props> = ({ cards, stick, onHit, onStick }) => {
-  const score = calculateScore(cards);
+const Player: FC<Props> = ({ score, stick, onHit, onStick }) => {
   const isPlayerBust = score > 21;
 
   if (isPlayerBust) {
