@@ -13,23 +13,20 @@ const Table: FC = () => {
   const takeCard = (playerType: "player" | "dealer") => {
     const recievedCard = deck.pop();
     setDeck(deck.slice(0, -1));
-    if (typeof recievedCard != "undefined") {
-      if (playerType === "player") {
-        player.push(recievedCard);
-        setPlayer((player) => [...player, recievedCard]);
-      }
-      if (playerType === "dealer") {
-        setDealer((dealer) => [...dealer, recievedCard]);
-      }
-      //keeps track of count for card counting
-      if (recievedCard <= 6) {
-        setCount((count) => count + 1);
-      } else if (recievedCard >= 10) {
-        setCount((count) => count - 1);
-      }
+    if (!recievedCard) return;
+    if (playerType === "player") {
+      player.push(recievedCard);
+      setPlayer((player) => [...player, recievedCard]);
     }
-
-    return;
+    if (playerType === "dealer") {
+      setDealer((dealer) => [...dealer, recievedCard]);
+    }
+    //keeps track of count for card counting
+    if (recievedCard <= 6) {
+      setCount((count) => count + 1);
+    } else if (recievedCard >= 10) {
+      setCount((count) => count - 1);
+    }
   };
 
   const handleStick = () => {
