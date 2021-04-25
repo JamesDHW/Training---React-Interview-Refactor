@@ -3,16 +3,6 @@ import Player from "./Player";
 import PlayingCards from "./PlayingCards";
 import { calculateScore, createShuffledDeck } from "./helpers";
 
-export interface TableProps {}
-
-export interface TableState {
-  deck: number[];
-  player: number[];
-  dealer: number[];
-  stick: boolean;
-  count: number;
-}
-
 const Table: FC = () => {
   const [deck, setDeck] = useState<number[]>(createShuffledDeck());
   const [player, setPlayer] = useState<number[]>(createShuffledDeck());
