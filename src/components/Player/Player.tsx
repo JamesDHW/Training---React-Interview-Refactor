@@ -7,7 +7,7 @@ interface Props {
   stick: boolean;
 }
 
-const Player: FC<Props> = ({ score, stick, onHit, onStick }) => {
+export const Player: FC<Props> = ({ score, stick, onHit, onStick }) => {
   const isPlayerBust = score > 21;
 
   if (isPlayerBust) {
@@ -42,5 +42,3 @@ const Player: FC<Props> = ({ score, stick, onHit, onStick }) => {
     </div>
   );
 };
-
-export default Player;

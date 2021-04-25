@@ -1,5 +1,5 @@
 import { FC, useEffect, useState, Dispatch, SetStateAction } from "react";
-import Player from "./Player";
+import { Player } from "./Player";
 import PlayingCards from "./PlayingCards";
 import WinnerBadge from "./WinnerBadge";
 import { calculateScore, createShuffledDeck } from "./helpers";
