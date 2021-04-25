@@ -20,11 +20,9 @@ export const Player: FC<Props> = ({ score, stick, onHit, onStick }) => {
 
   if (stick) {
     return (
-      <div>
-        <h1>
-          <span className="badge bg-primary  m-1">Player : {score}</span>
-        </h1>
-      </div>
+      <h1>
+        <span className="badge bg-primary  m-1">Player : {score}</span>
+      </h1>
     );
   }
 
