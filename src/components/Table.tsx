@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import Player from "./Player";
 import PlayingCards from "./PlayingCards";
+import WinnerBadge from "./WinnerBadge";
 import { calculateScore, createShuffledDeck } from "./helpers";
 
 const BlackJackTable: FC = () => {
@@ -49,22 +50,6 @@ const BlackJackTable: FC = () => {
     takeCard("dealer");
   }, []);
 
-  const displayWinner = () => {
-    if (
-      calculateScore(playerHand) > 21 ||
-      (calculateScore(playerHand) < calculateScore(dealerHand) && hasStuck)
-    ) {
-      return <span className="badge bg-warning  m-1">Dealer Wins</span>;
-    } else if (
-      hasStuck &&
-      calculateScore(playerHand) === calculateScore(dealerHand)
-    ) {
-      return <span className="badge bg-info  m-1">Draw</span>;
-    } else if (hasStuck) {
-      return <span className="badge bg-success  m-1">Player Wins</span>;
-    }
-  };
-
   const cardsLeft = deck.length === 0 ? "Deck Empty" : deck.length;
 
   return (
@@ -82,7 +67,11 @@ const BlackJackTable: FC = () => {
           Dealer: {calculateScore(dealerHand)}
         </span>
       </h1>
-      <h1>{displayWinner()}</h1>
+      <WinnerBadge
+        playerHand={playerHand}
+        dealerHand={dealerHand}
+        hasStuck={hasStuck}
+      />
       <button className="btn btn-large btn-danger" onClick={resetGame}>
         Reset Game
       </button>
