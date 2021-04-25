@@ -1,6 +1,6 @@
 import "./App.css";
 
-import BlackJackTable from "./components/Table";
+import BlackJackTable from "./components/BlackJackTable";
 
 function App() {
   return (
