@@ -1,10 +1,10 @@
 import { FC } from "react";
 
-interface PlayingCardProps {
+interface Props {
   value: number;
 }
 
-const PlayingCard: FC<PlayingCardProps> = (props) => {
+const PlayingCard: FC<Props> = ({ value }) => {
   const getCardDigit = (value: number): string => {
     const faceCards = {
       11: "J",
@@ -19,7 +19,7 @@ const PlayingCard: FC<PlayingCardProps> = (props) => {
   };
   return (
     <div className="card m-1">
-      <div className="card-body">{getCardDigit(props.value)}</div>
+      <div className="card-body">{getCardDigit(value)}</div>
     </div>
   );
 };
