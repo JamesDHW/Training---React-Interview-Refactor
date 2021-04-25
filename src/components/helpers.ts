@@ -21,3 +21,10 @@ export const calculateScore = (cards: number[]) => {
   }
   return score;
 };
+
+export const createShuffledDeck = () => {
+  const nums = Array.from({ length: 52 }, (_, index) => index + 1);
+  const deck = nums.map((num) => (num % 13) + 2);
+  const shuffledDeck = deck.sort(() => Math.random() - 0.5);
+  return shuffledDeck;
+};

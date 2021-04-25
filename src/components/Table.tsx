@@ -1,7 +1,7 @@
 import React from "react";
 import Player from "./Player";
 import PlayingCards from "./PlayingCards";
-import { calculateScore } from "./helpers";
+import { calculateScore, createShuffledDeck } from "./helpers";
 
 export interface TableProps {}
 
@@ -12,13 +12,6 @@ export interface TableState {
   stick: boolean;
   count: number;
 }
-
-const createShuffledDeck = () => {
-  const nums = Array.from({ length: 52 }, (_, index) => index + 1);
-  const deck = nums.map((num) => (num % 13) + 2);
-  const shuffledDeck = deck.sort(() => Math.random() - 0.5);
-  return shuffledDeck;
-};
 
 class Table extends React.Component<TableProps, TableState> {
   state = {
