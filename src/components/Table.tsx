@@ -71,12 +71,7 @@ const BlackJackTable: FC = () => {
     }
   };
 
-  const cardsLeft = () => {
-    if (deck.length === 0) {
-      return "Deck Empty";
-    }
-    return deck.length;
-  };
+  const cardsLeft = deck.length === 0 ? "Deck Empty" : deck.length;
 
   return (
     <div className="bg-light m-3">
@@ -100,7 +95,7 @@ const BlackJackTable: FC = () => {
       <h2>
         <span className="badge bg-secondary  m-1">Count : {count}</span>
         <span className="badge bg-secondary  m-1">
-          Cards Left : {cardsLeft()}
+          Cards Left : {cardsLeft}
         </span>
       </h2>
     </div>
