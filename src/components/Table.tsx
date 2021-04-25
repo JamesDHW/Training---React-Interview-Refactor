@@ -11,6 +11,9 @@ const BlackJackTable: FC = () => {
   const [hasStuck, setHasStuck] = useState<boolean>(false);
   const [runningCount, setCount] = useState<number>(0);
 
+  const playerScore = calculateScore(playerHand);
+  const dealerScore = calculateScore(dealerHand);
+
   const takeCard = (playerType: "player" | "dealer") => {
     const recievedCard = deck.pop();
     if (!recievedCard) throw new Error("No cards left in deck");
@@ -29,9 +32,8 @@ const BlackJackTable: FC = () => {
 
   useEffect(() => {
     if (!hasStuck) return;
-    const isDealerBust = calculateScore(dealerHand) > 21;
-    const isPlayerWinning =
-      calculateScore(dealerHand) < calculateScore(playerHand);
+    const isDealerBust = dealerScore > 21;
+    const isPlayerWinning = dealerScore < playerScore;
     if (!isDealerBust && isPlayerWinning) takeCard("dealer");
     if (isDealerBust) setDealerHand((dealerHand) => dealerHand.slice(0, -1));
   }, [deck, hasStuck]);
@@ -63,13 +65,11 @@ const BlackJackTable: FC = () => {
       />
       <PlayingCards cards={dealerHand} />
       <h1>
-        <span className="badge bg-primary  m-1">
-          Dealer: {calculateScore(dealerHand)}
-        </span>
+        <span className="badge bg-primary  m-1">Dealer: {dealerScore}</span>
       </h1>
       <WinnerBadge
-        dealerScore={calculateScore(dealerHand)}
-        playerScore={calculateScore(playerHand)}
+        dealerScore={dealerScore}
+        playerScore={playerScore}
         hasStuck={hasStuck}
       />
       <button className="btn btn-large btn-danger" onClick={resetGame}>
