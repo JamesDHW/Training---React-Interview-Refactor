@@ -29,18 +29,14 @@ const BlackJackTable: FC = () => {
     }
   };
 
-  const onStick = () => {
-    setHasStuck(true);
-    while (
-      calculateScore(dealerHand) < 22 &&
-      calculateScore(dealerHand) < calculateScore(playerHand)
-    ) {
-      takeCard("dealer");
-    }
-    if (calculateScore(dealerHand) > 21) {
-      setDealerHand(dealerHand.slice(0, -1));
-    }
-  };
+  useEffect(() => {
+    if (!hasStuck) return;
+    const isDealerBust = calculateScore(dealerHand) > 21;
+    const isPlayerWinning =
+      calculateScore(dealerHand) < calculateScore(playerHand);
+    if (!isDealerBust && isPlayerWinning) takeCard("dealer");
+    if (isDealerBust) setDealerHand((dealerHand) => dealerHand.slice(0, -1));
+  }, [deck, hasStuck]);
 
   const resetGame = () => {
     setPlayerHand([]);
@@ -79,7 +75,7 @@ const BlackJackTable: FC = () => {
       <PlayingCards cards={playerHand} />
       <Player
         onHit={() => takeCard("player")}
-        onStick={onStick}
+        onStick={() => setHasStuck(true)}
         cards={playerHand}
         stick={hasStuck}
       />
