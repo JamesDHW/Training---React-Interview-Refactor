@@ -80,9 +80,7 @@ const Table: FC = () => {
     <div className="bg-light m-3">
       <PlayingCards cards={player} />
       <Player
-        onHit={() => {
-          takeCard("player");
-        }}
+        onHit={() => takeCard("player")}
         onStick={handleStick}
         cards={player}
         stick={stick}
