@@ -22,11 +22,8 @@ const BlackJackTable: FC = () => {
       setDealerHand((dealerHand) => [...dealerHand, recievedCard]);
     }
 
-    if (recievedCard <= 6) {
-      setCount((runningCount) => runningCount + 1);
-    } else if (recievedCard >= 10) {
-      setCount((runningCount) => runningCount - 1);
-    }
+    if (recievedCard <= 6) setCount((runningCount) => runningCount + 1);
+    if (recievedCard >= 10) setCount((runningCount) => runningCount - 1);
   };
 
   useEffect(() => {
