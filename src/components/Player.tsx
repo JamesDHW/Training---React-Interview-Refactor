@@ -1,5 +1,4 @@
-import React, { FC } from "react";
-
+import { FC } from "react";
 import PlayingCards from "./PlayingCards";
 import { calculateScore } from "./helpers";
 
