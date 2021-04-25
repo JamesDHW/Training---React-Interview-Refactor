@@ -15,7 +15,7 @@ const BlackJackTable: FC = () => {
   const dealerScore = calculateScore(dealerHand);
 
   const takeCard = (setHand: Dispatch<SetStateAction<number[]>>) => {
-    const recievedCard = deck.pop();
+    const recievedCard = deck[deck.length - 1];
     if (!recievedCard) throw new Error("No cards left in deck");
 
     setDeck((deck) => deck.slice(0, -1));
