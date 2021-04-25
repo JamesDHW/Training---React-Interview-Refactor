@@ -3,14 +3,14 @@ import React, { FC } from "react";
 import PlayingCards from "./PlayingCards";
 import { calculateScore } from "./helpers";
 
-export interface PlayerProps {
+interface Props {
   onHit: () => void;
   onStick: () => void;
   cards: number[];
   stick: boolean;
 }
 
-const Player: FC<PlayerProps> = ({ cards, stick, onHit, onStick }) => {
+const Player: FC<Props> = ({ cards, stick, onHit, onStick }) => {
   const playerOptions = () => {
     const score = calculateScore(cards);
     if (score > 21) {
