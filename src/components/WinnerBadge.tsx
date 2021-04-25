@@ -1,5 +1,4 @@
 import { FC } from "react";
-import { calculateScore } from "./helpers";
 
 interface Props {
   dealerScore: number;
