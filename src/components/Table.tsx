@@ -1,4 +1,4 @@
-import React from "react";
+import { FC, useEffect, useState } from "react";
 import Player from "./Player";
 import PlayingCards from "./PlayingCards";
 import { calculateScore, createShuffledDeck } from "./helpers";
@@ -13,131 +13,111 @@ export interface TableState {
   count: number;
 }
 
-class Table extends React.Component<TableProps, TableState> {
-  state = {
-    deck: createShuffledDeck(),
-    player: new Array<number>(),
-    dealer: new Array<number>(),
-    stick: false,
-    count: 0,
-  };
+const Table: FC = () => {
+  const [deck, setDeck] = useState<Number[]>(createShuffledDeck());
+  const [player, setPlayer] = useState<Number[]>(createShuffledDeck());
+  const [dealer, setDealer] = useState<Number[]>(createShuffledDeck());
+  const [stick, setStick] = useState<boolean>(false);
+  const [count, setCount] = useState<Number>(0);
 
-  takeCard = (playerType: "player" | "dealer") => {
-    const deck = this.state.deck;
+  const takeCard = (playerType: "player" | "dealer") => {
     const recievedCard = deck.pop();
-    this.setState({ deck });
+    setDeck(deck.slice(0, -1));
     if (typeof recievedCard != "undefined") {
       if (playerType === "player") {
-        const player = this.state.player;
         player.push(recievedCard);
-        this.setState({ player });
+        setPlayer((player) => [...player, recievedCard]);
       }
       if (playerType === "dealer") {
-        const dealer = this.state.dealer;
-        dealer.push(recievedCard);
-        this.setState({ dealer });
+        setDealer((dealer) => [...dealer, recievedCard]);
       }
       //keeps track of count for card counting
       if (recievedCard <= 6) {
-        this.setState((state) => ({ count: state.count + 1 }));
+        setCount((count) => count + 1);
       } else if (recievedCard >= 10) {
-        this.setState((state) => ({ count: state.count - 1 }));
+        setCount((count) => count - 1);
       }
     }
 
     return;
   };
 
-  handleStick = () => {
-    this.setState({ stick: true });
+  const handleStick = () => {
+    setStick(true);
     while (
-      calculateScore(this.state.dealer) < 22 &&
-      calculateScore(this.state.dealer) < calculateScore(this.state.player)
+      calculateScore(dealer) < 22 &&
+      calculateScore(dealer) < calculateScore(player)
     ) {
-      this.takeCard("dealer");
+      takeCard("dealer");
     }
-    const dealer = this.state.dealer;
-    if (calculateScore(this.state.dealer) > 21) {
-      this.setState({ dealer: dealer.slice(0, -1) });
+    if (calculateScore(dealer) > 21) {
+      setDealer(dealer.slice(0, -1));
     }
   };
 
-  resetGame = () => {
-    this.setState(
-      {
-        player: [],
-        dealer: [],
-        stick: false,
-      },
-      () => {
-        this.takeCard("dealer");
-        this.takeCard("player");
-      }
-    );
+  const resetGame = () => {
+    setPlayer([]);
+    setDealer([]);
+    setStick(false);
+
+    takeCard("dealer");
+    takeCard("player");
   };
 
-  componentDidMount() {
-    this.takeCard("player");
-    this.takeCard("dealer");
-  }
+  useEffect(() => {
+    takeCard("player");
+    takeCard("dealer");
+  }, []);
 
-  displayWinner() {
+  const displayWinner = () => {
     if (
-      calculateScore(this.state.player) > 21 ||
-      (calculateScore(this.state.player) < calculateScore(this.state.dealer) &&
-        this.state.stick)
+      calculateScore(player) > 21 ||
+      (calculateScore(player) < calculateScore(dealer) && stick)
     ) {
       return <span className="badge bg-warning  m-1">Dealer Wins</span>;
-    } else if (
-      this.state.stick &&
-      calculateScore(this.state.player) === calculateScore(this.state.dealer)
-    ) {
+    } else if (stick && calculateScore(player) === calculateScore(dealer)) {
       return <span className="badge bg-info  m-1">Draw</span>;
-    } else if (this.state.stick) {
+    } else if (stick) {
       return <span className="badge bg-success  m-1">Player Wins</span>;
     }
-  }
+  };
 
-  cardsLeft() {
-    if (this.state.deck.length === 0) {
+  const cardsLeft = () => {
+    if (deck.length === 0) {
       return "Deck Empty";
     }
-    return this.state.deck.length;
-  }
+    return deck.length;
+  };
 
-  render() {
-    return (
-      <div className="bg-light m-3">
-        <PlayingCards cards={this.state.player} />
-        <Player
-          onHit={() => {
-            this.takeCard("player");
-          }}
-          onStick={this.handleStick}
-          cards={this.state.player}
-          stick={this.state.stick}
-        />
-        <PlayingCards cards={this.state.dealer} />
-        <h1>
-          <span className="badge bg-primary  m-1">
-            Dealer: {calculateScore(this.state.dealer)}
-          </span>
-        </h1>
-        <h1>{this.displayWinner()}</h1>
-        <button className="btn btn-large btn-danger" onClick={this.resetGame}>
-          Reset Game
-        </button>
-        <h2>
-          <span className="badge bg-secondary  m-1">
-            Count : {this.state.count}
-          </span>
-          <span className="badge bg-secondary  m-1">
-            Cards Left : {this.cardsLeft()}
-          </span>
-        </h2>
-      </div>
-    );
-  }
-}
+  return (
+    <div className="bg-light m-3">
+      <PlayingCards cards={player} />
+      <Player
+        onHit={() => {
+          takeCard("player");
+        }}
+        onStick={handleStick}
+        cards={player}
+        stick={stick}
+      />
+      <PlayingCards cards={dealer} />
+      <h1>
+        <span className="badge bg-primary  m-1">
+          Dealer: {calculateScore(dealer)}
+        </span>
+      </h1>
+      <h1>{displayWinner()}</h1>
+      <button className="btn btn-large btn-danger" onClick={resetGame}>
+        Reset Game
+      </button>
+      <h2>
+        <span className="badge bg-secondary  m-1">Count : {count}</span>
+        <span className="badge bg-secondary  m-1">
+          Cards Left : {cardsLeft()}
+        </span>
+      </h2>
+    </div>
+  );
+};
 
 export default Table;
