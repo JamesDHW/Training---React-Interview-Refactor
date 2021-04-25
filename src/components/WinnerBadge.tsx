@@ -10,6 +10,7 @@ interface Props {
 const WinnerBadge: FC<Props> = ({ playerScore, dealerScore, hasStuck }) => {
   const hasDealerWon =
     playerScore > 21 || (playerScore < dealerScore && hasStuck);
+  const isDraw = hasStuck && playerScore === dealerScore;
   if (hasDealerWon) {
     return (
       <h1>
@@ -17,7 +18,7 @@ const WinnerBadge: FC<Props> = ({ playerScore, dealerScore, hasStuck }) => {
       </h1>
     );
   }
-  if (hasStuck && playerScore === dealerScore) {
+  if (isDraw) {
     return (
       <h1>
         <span className="badge bg-info  m-1">Draw</span>
