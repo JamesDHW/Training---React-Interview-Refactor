@@ -3,11 +3,11 @@ import Player from "./Player";
 import PlayingCards from "./PlayingCards";
 import { calculateScore, createShuffledDeck } from "./helpers";
 
-const Table: FC = () => {
+const BlackJackTable: FC = () => {
   const [deck, setDeck] = useState<number[]>(createShuffledDeck());
-  const [player, setPlayer] = useState<number[]>(createShuffledDeck());
-  const [dealer, setDealer] = useState<number[]>(createShuffledDeck());
-  const [stick, setStick] = useState<boolean>(false);
+  const [playerHand, setPlayerHand] = useState<number[]>(createShuffledDeck());
+  const [dealerHand, setDealerHand] = useState<number[]>(createShuffledDeck());
+  const [hasStuck, setHasStuck] = useState<boolean>(false);
   const [count, setCount] = useState<number>(0);
 
   const takeCard = (playerType: "player" | "dealer") => {
@@ -15,11 +15,10 @@ const Table: FC = () => {
     setDeck(deck.slice(0, -1));
     if (!recievedCard) return;
     if (playerType === "player") {
-      player.push(recievedCard);
-      setPlayer((player) => [...player, recievedCard]);
+      setPlayerHand((playerHand) => [...playerHand, recievedCard]);
     }
     if (playerType === "dealer") {
-      setDealer((dealer) => [...dealer, recievedCard]);
+      setDealerHand((dealerHand) => [...dealerHand, recievedCard]);
     }
     //keeps track of count for card counting
     if (recievedCard <= 6) {
@@ -29,23 +28,23 @@ const Table: FC = () => {
     }
   };
 
-  const handleStick = () => {
-    setStick(true);
+  const onStick = () => {
+    setHasStuck(true);
     while (
-      calculateScore(dealer) < 22 &&
-      calculateScore(dealer) < calculateScore(player)
+      calculateScore(dealerHand) < 22 &&
+      calculateScore(dealerHand) < calculateScore(playerHand)
     ) {
       takeCard("dealer");
     }
-    if (calculateScore(dealer) > 21) {
-      setDealer(dealer.slice(0, -1));
+    if (calculateScore(dealerHand) > 21) {
+      setDealerHand(dealerHand.slice(0, -1));
     }
   };
 
   const resetGame = () => {
-    setPlayer([]);
-    setDealer([]);
-    setStick(false);
+    setPlayerHand([]);
+    setDealerHand([]);
+    setHasStuck(false);
 
     takeCard("dealer");
     takeCard("player");
@@ -58,13 +57,16 @@ const Table: FC = () => {
 
   const displayWinner = () => {
     if (
-      calculateScore(player) > 21 ||
-      (calculateScore(player) < calculateScore(dealer) && stick)
+      calculateScore(playerHand) > 21 ||
+      (calculateScore(playerHand) < calculateScore(dealerHand) && hasStuck)
     ) {
       return <span className="badge bg-warning  m-1">Dealer Wins</span>;
-    } else if (stick && calculateScore(player) === calculateScore(dealer)) {
+    } else if (
+      hasStuck &&
+      calculateScore(playerHand) === calculateScore(dealerHand)
+    ) {
       return <span className="badge bg-info  m-1">Draw</span>;
-    } else if (stick) {
+    } else if (hasStuck) {
       return <span className="badge bg-success  m-1">Player Wins</span>;
     }
   };
@@ -78,17 +80,17 @@ const Table: FC = () => {
 
   return (
     <div className="bg-light m-3">
-      <PlayingCards cards={player} />
+      <PlayingCards cards={playerHand} />
       <Player
         onHit={() => takeCard("player")}
-        onStick={handleStick}
-        cards={player}
-        stick={stick}
+        onStick={onStick}
+        cards={playerHand}
+        stick={hasStuck}
       />
-      <PlayingCards cards={dealer} />
+      <PlayingCards cards={dealerHand} />
       <h1>
         <span className="badge bg-primary  m-1">
-          Dealer: {calculateScore(dealer)}
+          Dealer: {calculateScore(dealerHand)}
         </span>
       </h1>
       <h1>{displayWinner()}</h1>
@@ -105,4 +107,4 @@ const Table: FC = () => {
   );
 };
 
-export default Table;
+export default BlackJackTable;
