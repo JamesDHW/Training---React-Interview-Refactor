@@ -115,6 +115,7 @@ class Table extends React.Component<TableProps, TableState> {
   render() {
     return (
       <div className="bg-light m-3">
+        <PlayingCards cards={this.state.player} />
         <Player
           onHit={() => {
             this.takeCard("player");
