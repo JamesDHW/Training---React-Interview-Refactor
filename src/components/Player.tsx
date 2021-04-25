@@ -10,9 +10,11 @@ interface Props {
 }
 
 const Player: FC<Props> = ({ cards, stick, onHit, onStick }) => {
+  const score = calculateScore(cards);
+  const isPlayerBust = score > 21;
+
   const playerOptions = () => {
-    const score = calculateScore(cards);
-    if (score > 21) {
+    if (isPlayerBust) {
       return (
         <h1>
           <span className="badge bg-danger  m-1">Bust</span>
