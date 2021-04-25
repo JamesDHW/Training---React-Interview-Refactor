@@ -6,19 +6,19 @@ import { calculateScore, createShuffledDeck } from "./helpers";
 export interface TableProps {}
 
 export interface TableState {
-  deck: Number[];
-  player: Number[];
-  dealer: Number[];
+  deck: number[];
+  player: number[];
+  dealer: number[];
   stick: boolean;
   count: number;
 }
 
 const Table: FC = () => {
-  const [deck, setDeck] = useState<Number[]>(createShuffledDeck());
-  const [player, setPlayer] = useState<Number[]>(createShuffledDeck());
-  const [dealer, setDealer] = useState<Number[]>(createShuffledDeck());
+  const [deck, setDeck] = useState<number[]>(createShuffledDeck());
+  const [player, setPlayer] = useState<number[]>(createShuffledDeck());
+  const [dealer, setDealer] = useState<number[]>(createShuffledDeck());
   const [stick, setStick] = useState<boolean>(false);
-  const [count, setCount] = useState<Number>(0);
+  const [count, setCount] = useState<number>(0);
 
   const takeCard = (playerType: "player" | "dealer") => {
     const recievedCard = deck.pop();
