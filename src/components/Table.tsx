@@ -68,8 +68,8 @@ const BlackJackTable: FC = () => {
         </span>
       </h1>
       <WinnerBadge
-        playerHand={playerHand}
-        dealerHand={dealerHand}
+        dealerScore={calculateScore(playerHand)}
+        playerScore={calculateScore(dealerHand)}
         hasStuck={hasStuck}
       />
       <button className="btn btn-large btn-danger" onClick={resetGame}>

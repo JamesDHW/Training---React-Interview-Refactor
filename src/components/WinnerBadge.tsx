@@ -2,23 +2,22 @@ import { FC } from "react";
 import { calculateScore } from "./helpers";
 
 interface Props {
-  playerHand: number[];
-  dealerHand: number[];
+  dealerScore: number;
+  playerScore: number;
   hasStuck: boolean;
 }
 
-const WinnerBadge: FC<Props> = ({ playerHand, dealerHand, hasStuck }) => {
-  if (
-    calculateScore(playerHand) > 21 ||
-    (calculateScore(playerHand) < calculateScore(dealerHand) && hasStuck)
-  ) {
+const WinnerBadge: FC<Props> = ({ playerScore, dealerScore, hasStuck }) => {
+  const hasDealerWon =
+    playerScore > 21 || (playerScore < dealerScore && hasStuck);
+  if (hasDealerWon) {
     return (
       <h1>
         <span className="badge bg-warning  m-1">Dealer Wins</span>
       </h1>
     );
   }
-  if (hasStuck && calculateScore(playerHand) === calculateScore(dealerHand)) {
+  if (hasStuck && playerScore === dealerScore) {
     return (
       <h1>
         <span className="badge bg-info  m-1">Draw</span>
