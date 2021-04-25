@@ -5,8 +5,8 @@ import { calculateScore, createShuffledDeck } from "./helpers";
 
 const BlackJackTable: FC = () => {
   const [deck, setDeck] = useState<number[]>(createShuffledDeck());
-  const [playerHand, setPlayerHand] = useState<number[]>(createShuffledDeck());
-  const [dealerHand, setDealerHand] = useState<number[]>(createShuffledDeck());
+  const [playerHand, setPlayerHand] = useState<number[]>([]);
+  const [dealerHand, setDealerHand] = useState<number[]>([]);
   const [hasStuck, setHasStuck] = useState<boolean>(false);
   const [count, setCount] = useState<number>(0);
 
