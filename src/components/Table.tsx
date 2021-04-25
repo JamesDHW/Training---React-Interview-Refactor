@@ -8,23 +8,24 @@ const BlackJackTable: FC = () => {
   const [playerHand, setPlayerHand] = useState<number[]>([]);
   const [dealerHand, setDealerHand] = useState<number[]>([]);
   const [hasStuck, setHasStuck] = useState<boolean>(false);
-  const [count, setCount] = useState<number>(0);
+  const [runningCount, setCount] = useState<number>(0);
 
   const takeCard = (playerType: "player" | "dealer") => {
     const recievedCard = deck.pop();
-    setDeck(deck.slice(0, -1));
-    if (!recievedCard) return;
+    if (!recievedCard) throw new Error("No cards left in deck");
+    setDeck((deck) => deck.slice(0, -1));
+
     if (playerType === "player") {
       setPlayerHand((playerHand) => [...playerHand, recievedCard]);
     }
     if (playerType === "dealer") {
       setDealerHand((dealerHand) => [...dealerHand, recievedCard]);
     }
-    //keeps track of count for card counting
+
     if (recievedCard <= 6) {
-      setCount((count) => count + 1);
+      setCount((runningCount) => runningCount + 1);
     } else if (recievedCard >= 10) {
-      setCount((count) => count - 1);
+      setCount((runningCount) => runningCount - 1);
     }
   };
 
@@ -93,7 +94,7 @@ const BlackJackTable: FC = () => {
         Reset Game
       </button>
       <h2>
-        <span className="badge bg-secondary  m-1">Count : {count}</span>
+        <span className="badge bg-secondary  m-1">Count : {runningCount}</span>
         <span className="badge bg-secondary  m-1">
           Cards Left : {cardsLeft}
         </span>
