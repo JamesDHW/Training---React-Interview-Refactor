@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState, Dispatch, SetStateAction } from "react";
 import Player from "./Player";
 import PlayingCards from "./PlayingCards";
 import WinnerBadge from "./WinnerBadge";
@@ -14,17 +14,12 @@ const BlackJackTable: FC = () => {
   const playerScore = calculateScore(playerHand);
   const dealerScore = calculateScore(dealerHand);
 
-  const takeCard = (playerType: "player" | "dealer") => {
+  const takeCard = (setHand: Dispatch<SetStateAction<number[]>>) => {
     const recievedCard = deck.pop();
     if (!recievedCard) throw new Error("No cards left in deck");
-    setDeck((deck) => deck.slice(0, -1));
 
-    if (playerType === "player") {
-      setPlayerHand((playerHand) => [...playerHand, recievedCard]);
-    }
-    if (playerType === "dealer") {
-      setDealerHand((dealerHand) => [...dealerHand, recievedCard]);
-    }
+    setDeck((deck) => deck.slice(0, -1));
+    setHand((hand) => [...hand, recievedCard]);
 
     if (recievedCard <= 6) setCount((runningCount) => runningCount + 1);
     if (recievedCard >= 10) setCount((runningCount) => runningCount - 1);
@@ -34,7 +29,7 @@ const BlackJackTable: FC = () => {
     if (!hasStuck) return;
     const isDealerBust = dealerScore > 21;
     const isPlayerWinning = dealerScore < playerScore;
-    if (!isDealerBust && isPlayerWinning) takeCard("dealer");
+    if (!isDealerBust && isPlayerWinning) takeCard(setDealerHand);
     if (isDealerBust) setDealerHand((dealerHand) => dealerHand.slice(0, -1));
   }, [deck, hasStuck]);
 
@@ -43,13 +38,13 @@ const BlackJackTable: FC = () => {
     setDealerHand([]);
     setHasStuck(false);
 
-    takeCard("dealer");
-    takeCard("player");
+    takeCard(setDealerHand);
+    takeCard(setPlayerHand);
   };
 
   useEffect(() => {
-    takeCard("player");
-    takeCard("dealer");
+    takeCard(setPlayerHand);
+    takeCard(setDealerHand);
   }, []);
 
   const cardsLeft = deck.length === 0 ? "Deck Empty" : deck.length;
@@ -58,7 +53,7 @@ const BlackJackTable: FC = () => {
     <div className="bg-light m-3">
       <PlayingCards cards={playerHand} />
       <Player
-        onHit={() => takeCard("player")}
+        onHit={() => takeCard(setPlayerHand)}
         onStick={() => setHasStuck(true)}
         cards={playerHand}
         stick={hasStuck}
