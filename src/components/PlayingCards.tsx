@@ -5,11 +5,11 @@ interface PlayingCardsProps {
   cards: number[];
 }
 
-const PlayingCards: FC<PlayingCardsProps> = (props) => {
+const PlayingCards: FC<PlayingCardsProps> = ({ cards }) => {
   return (
     <div>
       <div className="row m-5">
-        {props.cards.map((card, index) => (
+        {cards.map((card, index) => (
           <PlayingCard key={index} value={card} />
         ))}
       </div>
